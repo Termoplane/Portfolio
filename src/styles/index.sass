@@ -1,0 +1,51 @@
+@import "variables"
+@import "typography"
+@import "themes"
+
+*
+  box-sizing: border-box
+  color: var(--text-color)
+  font-size: 1.3vw
+  @include mobile
+    font-size: 4.5vw
+
+a 
+  text-decoration: none
+
+h1,h2,h3,h4
+  font-family: 'Gayathri'
+  font-weight: 400
+  font-size: 2.5rem
+
+p
+  font-family: 'Roboto'
+  font-size: 1rem
+
+input
+  color: #000
+  background: none
+  border: 0
+  font-size: 1.5em !important
+  border-bottom: 1px solid #000
+  line-height: 2em
+  font-weight: bold
+  &:focus
+    outline: none
+  &::placeholder
+    font-weight: normal
+    color: #6A6A6A
+
+button
+  font-family: 'Roboto'
+  background-color: var(--primary-color)
+  display: flex
+  align-items: center
+  justify-content: center
+  text-align: center
+  font-size: 3rem
+  border: 0
+  outline: none
+  transition: background-color 400ms, color 400ms
+  &:hover
+    background-color: var(--hover-color)
+    cursor: pointer
