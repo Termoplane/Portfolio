@@ -17,7 +17,8 @@
         class="technology"
         data-aos-once='true'
         data-aos="fade-up"
-        data-aos-delay="100"
+        data-aos-delay="200"
+        data-aos-duration="800"
         data-aos-easing="ease-in-out"
       >
         <h3 class="name">
