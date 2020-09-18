@@ -2,6 +2,7 @@
   <div class="main">
     <div 
       class="card" 
+      data-aos-once='true'
       data-aos="fade-right"
       data-aos-delay="200"
       data-aos-duration="1000"
@@ -32,6 +33,7 @@
               <img src="@/assets/icons/youtube-light.svg" v-else>
             </a>
           </div>
+          <p>alex223666@gmail.com</p>
         </div>
       </div>
     </div>
@@ -39,7 +41,9 @@
     <div class="about">
       <img src="@/assets/icons/arrow-light.svg" v-if="!darkTheme">
       <img src="@/assets/icons/arrow-dark.svg" v-else>
+      <p class="its-me">Это Я!</p>
       <div 
+        data-aos-once='true'
         data-aos="fade-left"
         data-aos-delay="200"
         data-aos-duration="1000"
@@ -48,8 +52,8 @@
         <h1>Привет!</h1>
         <br>
         <p>
-          Меня зовут Лёша, я веб-разработчик, самоучка. Пишу код, учусь, работаю, живу.
-          Увлекаюсь многими интересными штуками: играю на гитаре, перевожу лекции.
+          Меня зовут Алексей, я веб-разработчик, самоучка. Пишу код, учусь, работаю, живу.
+          Увлекаюсь многими интересными вещами: играю на гитаре, перевожу лекции.
         </p>
         <br>
         <p>
@@ -77,6 +81,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
 .main
   padding: 2rem 0
   width: 100%
@@ -94,6 +99,13 @@ export default {
     @include mobile
       margin: 0 1.5rem
       order: -1
+    .its-me
+      position: absolute
+      top: 11.7rem
+      left: 37rem
+      transform: rotateZ(-7deg)
+      @include mobile
+        display: none
     img
       position: absolute
       width: 20rem
@@ -102,7 +114,6 @@ export default {
       left: 28rem
       @include mobile
         display: none
-      
   .card
     justify-self: center
     @include mobile
@@ -159,4 +170,8 @@ export default {
               width: 2rem
               height: 2rem
               fill: var(--text-color)
+html[theme="dark"]
+  .card
+    .front, .back
+      box-shadow: 0px 0px 40px -11px var(--opposite-color)
 </style>>

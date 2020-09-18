@@ -18,10 +18,10 @@ export default {
     if (this.$route.hash) {
       const id = this.$route.hash.slice(1)
       if (id) {
-        document.getElementById(id).scrollIntoView({
-          block: 'start',
-          behavior: 'smooth'
-        })
+        const element = document.getElementById(id)
+        element.scrollIntoView({
+          behavior: "smooth"
+        });
       }
     }
   }

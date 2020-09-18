@@ -1,17 +1,40 @@
 <template>
   <div class="header" ref="header" @scroll="opacityToggler">
-    <button class="button" type="submit" @click.prevent="page('')">
-      <div class="button__text">Главная</div> 
+    <router-link class="button" :to="{ path: '/', hash: '#about' }" type="submit" @click.native="page('about')">
+      <div class="button__text">Обо мне</div> 
       <div class="button__bottom"></div>
-    </button>
-    <button class="button" type="submit" @click.prevent="page('about')">
-        <div class="button__text">Обо мне</div> 
+    </router-link>
+    <router-link class="button" :to="{ path: '/', hash: '#portfolio' }"  type="submit" @click.native="page('portfolio')">
+        <div class="button__text">Портфолио</div> 
         <div class="button__bottom"></div>
-    </button>
+    </router-link>
+    <router-link class="button" :to="{ path: '/', hash: '#technologies' }" type="submit" @click.native="page('technologies')">
+        <div class="button__text">Технологии</div> 
+        <div class="button__bottom"></div>
+    </router-link>
     <button class="mobileMenuToggle">
-      <img src="@/assets/icons/bars-light.svg" v-if="!darkTheme">
-      <img src="@/assets/icons/bars-dark.svg" v-else>
+      <img src="@/assets/icons/bars-light.svg" v-if="!darkTheme" @click.prevent="menuTrigger">
+      <img src="@/assets/icons/bars-dark.svg" v-else @click.prevent="menuTrigger">
     </button>
+    <div class="mobileMenu-container">
+      <div :class="overlay" @click.prevent="hideMenu"></div>
+      <div :class="mobileMenu">
+        <img src="@/assets/icons/times-light.svg" v-if="!darkTheme" @click.prevent="hideMenu">
+        <img src="@/assets/icons/times-dark.svg" v-else @click.prevent="hideMenu">
+        <router-link exact-active-class="mobile-active" :to="{ path: '/', hash: '#about' }"  class="mobile-button" @click.native="mobilePage('about')">
+          <h1 class="mobile-button__text">Обо мне</h1>
+          <div class="mobile-button__left"></div>
+        </router-link>
+        <router-link exact-active-class="mobile-active" :to="{ path: '/', hash: '#portfolio' }"  class="mobile-button" @click.native="mobilePage('portfolio')">
+          <h1 class="mobile-button__text">Портфолио</h1>
+          <div class="mobile-button__left"></div>
+        </router-link>
+        <router-link exact-active-class="mobile-active" :to="{ path: '/', hash: '#technologies' }"  class="mobile-button" @click.native="mobilePage('technologies')">
+          <h1 class="mobile-button__text">Технологии</h1>
+          <div class="mobile-button__left"></div>
+        </router-link>
+      </div>
+    </div>
     <div style="flexGrow: 1;"></div>
     <div class="switcher">
       <label class="switch">
@@ -37,17 +60,40 @@ export default {
   name: "TheHeader",
   data() {
     return {
+      mobileMenu: ['mobileMenu'],
+      overlay: ['overlay', 'hide'],
       darkTheme: localStorage.getItem("theme") ? localStorage.getItem("theme") === "dark" ? true : false : false
     }
   },
   methods: {
+    mobilePage(page){
+      const element = document.getElementById(page)
+      element.scrollIntoView({
+        behavior: "smooth"
+      });
+      this.mobileMenu.pop()
+      this.overlay.push('hide')
+      document.body.style = "overflow: visible"
+    },
+    menuTrigger() {
+      this.mobileMenu.push('slide-in')
+      this.overlay.pop()
+      document.body.style = "overflow: hidden"
+    },
+    hideMenu() {
+      this.mobileMenu.pop()
+      this.overlay.push('hide')
+      document.body.style = "overflow: visible"
+    },
     page(page) {
-      window.location.href = `/#${page}`;
+      const element = document.getElementById(page)
+      element.scrollIntoView({
+        behavior: "smooth"
+      })
     },
     opacityToggler() {
-      console.log(window.pageYOffset);
-      const currentScrollPosition = window.pageYOffset
-      if (currentScrollPosition  > 200) {
+      const currentScrollPosition = window.pageYOffset;
+      if (currentScrollPosition > 200) {
         this.$refs.header.style.opacity = 0.97;
       } else {
         this.$refs.header.style.opacity = 1;
@@ -69,19 +115,21 @@ export default {
       this.darkMode = false
     }
   },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.opacityToggler)
+  },
   watch: {
     darkTheme: function(val) {
-        // add/remove class to/from html tag
-        let htmlElement = document.documentElement;
-        this.$store.commit('setTheme', !!val)
+      let htmlElement = document.documentElement;
+      this.$store.commit('setTheme', !!val)
 
-        if (val) {
-            localStorage.setItem("theme", 'dark');
-            htmlElement.setAttribute('theme', 'dark');
-        } else {
-            localStorage.setItem("theme", 'light');
-            htmlElement.setAttribute('theme', 'light');
-        }
+      if (val) {
+        localStorage.setItem("theme", 'dark');
+        htmlElement.setAttribute('theme', 'dark');
+      } else {
+        localStorage.setItem("theme", 'light');
+        htmlElement.setAttribute('theme', 'light');
+      }
     }
   }
 }
@@ -93,13 +141,14 @@ export default {
   width: 100%
   height: 4.3rem
   background: var(--header-color)
-  box-shadow: 0px 1px 9px 0px var(--shadow-color)
+  box-shadow: 0px 1px 9px -2px var(--opposite-color)
   position: sticky
   top: 0
   display: flex
   transition: box-shadow 800ms, background 400ms, opacity 800ms
   justify-content: space-around
   align-items: center
+
   .mobileMenuToggle
     background: var(--header-color)
     margin-left: 1rem
@@ -108,18 +157,91 @@ export default {
     img
       width: 1.7rem
       height: 1.7rem
+
+  .mobileMenu-container
+    .hide
+      display: none
+    .overlay
+      position: fixed
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      background:
+        color: rgba(black, 0.5)
+      z-index: 50
+    .mobileMenu
+      opacity: 1 !important
+      background:
+        color: var(--primary-color)
+      width: 50vw
+      height: 100vh
+      position: fixed
+      top: 0
+      left: 0
+      transform: translateX(-100vw)
+      transition: all 1000ms ease
+      z-index: 100
+      .mobile-button
+        margin-bottom: 2rem
+        font-family: 'Noto Serif', serif
+        width: 100%
+        position: relative
+        display: flex
+        height: 2rem
+        justify-content: center
+        align-items: center
+        overflow: hidden
+        transition: background 800ms, height 800ms
+        &__text
+          font-size: 1.5rem
+        &__left
+          position: absolute
+          clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)
+          background: var(--secondary-color)
+          left: -2rem
+          height: 2rem
+          width: 2rem
+          transition: left 800ms
+      .mobile-active
+        display: flex
+        justify-content: center
+        align-items: center !important
+        height: 4rem
+        background: var(--header-color)
+        .mobile-button__left
+          position: absolute
+          clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)
+          background: var(--secondary-color)
+          left: -1.3rem
+          height: 4rem
+          width: 2rem
+      img
+        margin-left: 1rem
+        margin-top: 1rem
+        margin-bottom: 2rem
+        height: 2rem
+        width: 2rem
+      @include desktop
+        display: none
+    .slide-in
+      transform: translateX(0)
+
   .button
     background: var(--header-color)
     @include mobile
       display: none
-    font-family: 'Gayathri'
+    font-family: 'Noto Serif', serif
     width: 10rem
-    margin-right: 2rem
+    margin-right: 0.2rem
     position: relative
     height: 100%
     display: flex
     flex-direction: column
-    overflow: hidden  
+    align-items: center
+    justify-content: center
+    overflow: hidden
+    transition: background-color 400ms, color 400ms
     &:first-child
       margin-left: 1rem
     &:hover 
@@ -128,7 +250,7 @@ export default {
         top: -1.5rem
     .button__text
       position: relative  
-      font-size: 1.5rem
+      font-size: 1.2rem
     .button__bottom
       clip-path: polygon(100% 0, 100% 50%, 50% 100%, 0 50%, 0 0, 47% 0)
       opacity: 1
@@ -138,6 +260,7 @@ export default {
       top: -2.5rem
       background: var(--secondary-color)
       transition: top 400ms
+
   .switcher
     display: flex
     flex-direction: row
