@@ -83,9 +83,7 @@ export default {
 <style lang="sass" scoped>
 
 .main
-  padding: 2rem 0
-  width: 100%
-  height: 100%
+  padding: 2rem 0rem
   display: grid
   grid-template-columns: 1fr 1fr
   border-bottom: 1px solid var(--text-color)

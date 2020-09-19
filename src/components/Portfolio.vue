@@ -62,8 +62,6 @@ export default {
 <style lang="sass" scoped>
 .main
   background: var(--header-color)
-  width: 100%
-  height: 100%
   text-align: center
   display: flex
   flex-direction: column

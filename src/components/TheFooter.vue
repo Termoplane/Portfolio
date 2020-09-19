@@ -41,8 +41,7 @@ export default {
   background-color: var(--header-color)
   align-items: center
   justify-content: center
-  width: 100%
-  height: 100%
+  width: 100vw
   padding: 0.5rem 0
   &__block
     display: flex

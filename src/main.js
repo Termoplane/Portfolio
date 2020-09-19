@@ -5,7 +5,6 @@ import store from "./store";
 import AOS from 'aos';
 
 import 'aos/dist/aos.css'
-import './styles/index.sass'
 
 Vue.config.productionTip = false;
 

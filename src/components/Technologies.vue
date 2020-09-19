@@ -103,8 +103,6 @@ export default {
 
 <style lang="sass" scoped>
 .main
-  width: 100%
-  height: 100%
   padding: 3rem 0
   text-align: center
   display: flex
